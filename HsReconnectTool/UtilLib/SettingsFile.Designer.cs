@@ -94,5 +94,17 @@ namespace UtilLib {
                 this["EnableDisconnectButton"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string HearthstoneExePath {
+            get {
+                return ((string)(this["HearthstoneExePath"]));
+            }
+            set {
+                this["HearthstoneExePath"] = value;
+            }
+        }
     }
 }

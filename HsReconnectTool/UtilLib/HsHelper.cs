@@ -68,52 +68,96 @@ namespace UtilLib
             }
         }
 
+        public void CloseConnectionsToServer()
+        {
+            try
+            {
+                Console.WriteLine("Closing connections...");
+
+                if (firewall != null)
+                {
+                    Task.Factory.StartNew(() => {
+                        try { DisconnectViaFirewall(); }
+                        catch (Exception ex) { LogError("Firewall disconnect failed", ex); MessageBox.Show($"Firewall disconnect failed: {ex.Message}"); }
+                    });
+                }
+                else
+                {
+                    Task.Factory.StartNew(() => {
+                        try { DisconnectViaTcpMessage(); }
+                        catch (Exception ex) { LogError("TCP disconnect failed", ex); MessageBox.Show($"TCP disconnect failed: {ex.Message}"); }
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                LogError("Unexpected error", ex);
+                MessageBox.Show($"Unexpected error: {ex.Message}");
+            }
+        }
+
         void DisconnectViaFirewall()
         {
-            isForceDisconnected = true;
+            try
+            {
+                isForceDisconnected = true;
 
-            int DisconnectTimeoutMs = rnd.Next(SettingsFile.Default.DisconnectIntervalMin * 1000, SettingsFile.Default.DisconnectIntervalMax * 1000);
+                int DisconnectTimeoutMs = rnd.Next(SettingsFile.Default.DisconnectIntervalMin * 1000, SettingsFile.Default.DisconnectIntervalMax * 1000);
 
-            firewall.EnableRule();
-            System.Threading.Thread.Sleep(DisconnectTimeoutMs);
-            firewall.DisableRule();
-
-            isForceDisconnected = false;
+                firewall.EnableRule();
+                System.Threading.Thread.Sleep(DisconnectTimeoutMs);
+                firewall.DisableRule();
+            }
+            catch (Exception ex)
+            {
+                LogError("Firewall operation failed", ex);
+                MessageBox.Show($"Firewall operation failed: {ex.Message}");
+            }
+            finally
+            {
+                isForceDisconnected = false;
+            }
         }
         void DisconnectViaTcpMessage()
         {
-            int DisableButtonIntervalMs = 4000;
-
-            HsState state = UpdateHsState();
-            isForceDisconnected = true;
-
-            foreach (var c in state.Connections)
+            try
             {
-                if (!Util.IsRemoteConnection(c))
-                    continue;
+                int DisableButtonIntervalMs = 4000;
 
-                Console.WriteLine("Closing connection. {0}", c);
-                String error = iphlpapi.CloseRemoteIP(c.ToTcpRow());
-                if (null != error)
-                    MessageBox.Show(String.Format("Cannot close connection {0}\r\nError: {1}", c, error));
+                HsState state = UpdateHsState();
+                isForceDisconnected = true;
+
+                foreach (var c in state.Connections)
+                {
+                    if (!Util.IsRemoteConnection(c))
+                        continue;
+
+                    Console.WriteLine("Closing connection. {0}", c);
+                    String error = iphlpapi.CloseRemoteIP(c.ToTcpRow());
+                    if (null != error)
+                        MessageBox.Show(String.Format("Cannot close connection {0}\r\nError: {1}", c, error));
+                }
+
+                System.Threading.Thread.Sleep(DisableButtonIntervalMs);
             }
-
-            System.Threading.Thread.Sleep(DisableButtonIntervalMs);
-            isForceDisconnected = false;
+            catch (Exception ex)
+            {
+                LogError("TCP operation failed", ex);
+                MessageBox.Show($"TCP operation failed: {ex.Message}");
+            }
+            finally
+            {
+                isForceDisconnected = false;
+            }
         }
-        public void CloseConnectionsToServer()
+
+        private void LogError(string message, Exception ex)
         {
-            Console.WriteLine("Closing connections...");
-
-            if (firewall != null)
+            try
             {
-                Task.Factory.StartNew(DisconnectViaFirewall);
+                System.IO.File.AppendAllText("HsReconnectTool_ErrorLog.txt", $"[{DateTime.Now}] {message}: {ex}\n");
             }
-            else
-            {
-                Task.Factory.StartNew(DisconnectViaTcpMessage);
-            }
+            catch { /* ignore logging errors */ }
         }
-
     }
 }

@@ -22,6 +22,7 @@ namespace UtilLib
             disconnectButtonPosY.Value = SettingsFile.Default.DisconnectButtonPosY;
             disconnectButtonCheckbox.Checked = SettingsFile.Default.EnableDisconnectButton;
             disablePrivilegeWarningCheckbox.Checked = SettingsFile.Default.DisablePrivilegeWarning;
+            hearthstoneExePathTextBox.Text = SettingsFile.Default.HearthstoneExePath;
 
             new ToolTip().SetToolTip(disconnectMin, "Minimal diconnect time in seconds");
             new ToolTip().SetToolTip(disconnectMax, "Maximal diconnect time in seconds");
@@ -36,6 +37,7 @@ namespace UtilLib
             SettingsFile.Default.DisconnectButtonPosY = (int)disconnectButtonPosY.Value;
             SettingsFile.Default.EnableDisconnectButton = disconnectButtonCheckbox.Checked;
             SettingsFile.Default.DisablePrivilegeWarning = disablePrivilegeWarningCheckbox.Checked;
+            SettingsFile.Default.HearthstoneExePath = hearthstoneExePathTextBox.Text;
             SettingsFile.Default.Save();
         }
 

@@ -16,6 +16,7 @@ namespace HsReconnectTool
             floatReconnectButton.Visible = float_button_checkBox.Checked;
             this.FormClosing += (s_, e_) => SettingsFileProxy.Default.FloatingReconnectButtonPosition = floatReconnectButton.Location;
             SettingsFileProxy.Default.PropertyChanged += (s_, e_) => ReloadSettings();
+            UtilLib.Util.WarnIfNotElevated();
             ReloadSettings();
         }
         private void MainWindow_Load(object sender, EventArgs e)
@@ -62,7 +63,15 @@ namespace HsReconnectTool
 
         private void close_connsection_button_Click(object sender, EventArgs e)
         {
-            HsHelper.Instance.CloseConnectionsToServer();
+            try
+            {
+                HsHelper.Instance.CloseConnectionsToServer();
+                MessageBox.Show("Attempted to close Hearthstone connections. Check status above for results.", "Operation Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error closing connections: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             UpdateHsInfo();
         }
 

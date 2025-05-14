@@ -1,5 +1,4 @@
-﻿
-namespace UtilLib
+﻿namespace UtilLib
 {
     partial class SettingsForm
     {
@@ -41,6 +40,8 @@ namespace UtilLib
             this.cancelButton = new System.Windows.Forms.Button();
             this.disconnectButtonLabel = new System.Windows.Forms.Label();
             this.disconnectButtonCheckbox = new System.Windows.Forms.CheckBox();
+            this.hearthstoneExePathLabel = new System.Windows.Forms.Label();
+            this.hearthstoneExePathTextBox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.disconnectMin)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.disconnectMax)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.disconnectButtonPosY)).BeginInit();
@@ -235,11 +236,31 @@ namespace UtilLib
             this.disconnectButtonCheckbox.TabIndex = 10;
             this.disconnectButtonCheckbox.UseVisualStyleBackColor = true;
             // 
+            // hearthstoneExePathLabel
+            // 
+            this.hearthstoneExePathLabel.AutoSize = true;
+            this.hearthstoneExePathLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
+            this.hearthstoneExePathLabel.Location = new System.Drawing.Point(30, 70);
+            this.hearthstoneExePathLabel.Name = "hearthstoneExePathLabel";
+            this.hearthstoneExePathLabel.Size = new System.Drawing.Size(320, 32);
+            this.hearthstoneExePathLabel.TabIndex = 12;
+            this.hearthstoneExePathLabel.Text = "Hearthstone.exe path";
+            // 
+            // hearthstoneExePathTextBox
+            // 
+            this.hearthstoneExePathTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.hearthstoneExePathTextBox.Location = new System.Drawing.Point(360, 74);
+            this.hearthstoneExePathTextBox.Name = "hearthstoneExePathTextBox";
+            this.hearthstoneExePathTextBox.Size = new System.Drawing.Size(330, 35);
+            this.hearthstoneExePathTextBox.TabIndex = 13;
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(698, 394);
+            this.Controls.Add(this.hearthstoneExePathLabel);
+            this.Controls.Add(this.hearthstoneExePathTextBox);
             this.Controls.Add(this.disconnectButtonLabel);
             this.Controls.Add(this.disconnectButtonCheckbox);
             this.Controls.Add(this.cancelButton);
@@ -279,5 +300,7 @@ namespace UtilLib
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Label disconnectButtonLabel;
         private System.Windows.Forms.CheckBox disconnectButtonCheckbox;
+        private System.Windows.Forms.Label hearthstoneExePathLabel;
+        private System.Windows.Forms.TextBox hearthstoneExePathTextBox;
     }
 }
